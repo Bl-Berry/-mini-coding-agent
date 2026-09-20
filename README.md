@@ -1,7 +1,7 @@
 # mini-coding-agent
 
 > 基于 HuggingFace [smolagents](https://github.com/huggingface/smolagents) **二次开发**的轻量级 Coding Agent。
-> 在 `CodeAgent` 基础上新增了「文件操作工具集 + 命令安全层 + 跨会话记忆」，让 Agent 能在沙箱目录内完成「读 → 改 → 验」的代码操作闭环。
+> 在 `CodeAgent` 基础上新增了「文件操作工具集 + 命令安全层 + 跨会话记忆 + 反思」，让 Agent 能在沙箱目录内完成「读 → 改 → 验」的代码操作闭环，并能从执行中自我反思、沉淀经验。
 
 ---
 
@@ -40,6 +40,14 @@
 
 配套 `memory_demo.py` 演示「连续两次任务，第二次能记住第一次」。
 
+### 4. 反思模块（`reflect.py`）
+
+从一次任务的执行轨迹里，让 LLM 反思并提炼出「可复用教训」，存入记忆，下次任务自动注入：
+
+- 结构化反思：产出 `task_type` / `domain` / `lesson` / `applicable_when` / `evidence` 五字段
+- 执行轨迹压缩 + 成功判断（区分「一次通过」「踩坑后自纠」「失败」）
+- 配套 `reflection_demo.py` 演示「跑任务 → 反思 → 存教训 → 下次注入」的闭环
+
 ---
 
 ## 🧰 技术栈
@@ -75,6 +83,9 @@ python memory_demo.py
 
 # 命令安全测试
 python security_test.py
+
+# 反思闭环演示
+python reflection_demo.py
 ```
 
 ---
@@ -85,8 +96,10 @@ python security_test.py
 mini-coding-agent/
 ├── coding_tools.py      # 文件操作工具集 + 命令安全层
 ├── agent_memory.py      # 跨会话记忆系统
+├── reflect.py           # 反思模块（从执行轨迹提炼教训）
 ├── mini_coding_agent.py # Agent 装配 + 读-改-验演示
 ├── memory_demo.py       # 记忆闭环演示
+├── reflection_demo.py   # 反思闭环演示
 ├── security_test.py     # 命令安全测试
 ├── requirements.txt     # 依赖清单
 └── .env.example         # 环境变量模板
@@ -96,4 +109,4 @@ mini-coding-agent/
 
 ## 📝 说明
 
-本项目基于开源的 [smolagents](https://github.com/huggingface/smolagents) 框架进行二次开发，Agent 核心循环与 CodeAct 执行引擎来自 smolagents，本仓库的贡献集中在**文件操作工具集、命令安全层、跨会话记忆系统**三部分。
+本项目基于开源的 [smolagents](https://github.com/huggingface/smolagents) 框架进行二次开发，Agent 核心循环与 CodeAct 执行引擎来自 smolagents，本仓库的贡献集中在**文件操作工具集、命令安全层、跨会话记忆系统、反思模块**四部分。
