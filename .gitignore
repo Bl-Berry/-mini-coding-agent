@@ -1,0 +1,11 @@
+# 敏感信息
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# 运行时产物
+sandbox/
+memory.jsonl
